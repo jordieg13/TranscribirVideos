@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Transcriptor de Vídeos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="grain"></div>
+
+  <main>
+    <header>
+      <div class="logo-mark">▶</div>
+      <h1>Transcriptor</h1>
+      <p class="subtitle">Pega la URL de cualquier vídeo público y obtén su transcripción al instante.</p>
+      <p class="platforms">YouTube · X · TikTok · Instagram</p>
+    </header>
+
+    <section class="input-section">
+      <div class="input-wrapper">
+        <label for="video-url">URL del vídeo</label>
+        <div class="input-row">
+          <textarea
+            id="video-url"
+            placeholder="https://www.youtube.com/watch?v=..."
+            rows="2"
+            autocomplete="off"
+            spellcheck="false"
+          ></textarea>
+          <button id="transcribe-btn" aria-label="Transcribir">
+            <span class="btn-text">Transcribir</span>
+            <span class="btn-icon">→</span>
+          </button>
+        </div>
+        <p class="hint" id="error-msg" role="alert" aria-live="polite"></p>
+      </div>
+    </section>
+
+    <section class="output-section" id="output-section" aria-live="polite">
+      <div class="output-skeleton" id="skeleton" aria-hidden="true">
+        <div class="sk-line w80"></div>
+        <div class="sk-line w100"></div>
+        <div class="sk-line w60"></div>
+        <div class="sk-line w100"></div>
+        <div class="sk-line w90"></div>
+        <div class="sk-line w70"></div>
+      </div>
+
+      <div class="output-card" id="output-card">
+        <div class="output-header">
+          <span class="output-label">Transcripción</span>
+          <button class="copy-btn" id="copy-btn" title="Copiar texto">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            Copiar
+          </button>
+        </div>
+        <div class="output-text" id="output-text"></div>
+        <div class="output-footer">
+          <span id="word-count" class="word-count"></span>
+          <a id="download-link" class="download-btn" download="transcripcion.txt">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            Descargar .txt
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
