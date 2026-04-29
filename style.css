@@ -166,6 +166,45 @@
   .t-input::placeholder {
     color: rgba(180, 170, 210, 0.3);
   }
+
+  .t-select-row {
+    display: flex;
+    align-items: center;
+    background: #1c2540;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    height: 44px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .t-select-row:focus-within {
+    border-color: rgba(130, 100, 230, 0.6);
+    box-shadow: 0 0 0 3px rgba(120, 80, 220, 0.15);
+  }
+
+  .t-select {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    color: rgba(230, 225, 245, 0.9);
+    font-family: 'Outfit', sans-serif;
+    font-size: 13px;
+    outline: none;
+    padding: 0 14px;
+    cursor: pointer;
+  }
+
+  .t-select option {
+    background: #1c2540;
+    color: #e8e6f0;
+  }
+
+  .t-hint {
+    font-size: 11px;
+    color: rgba(180, 170, 210, 0.45);
+    line-height: 1.5;
+  }
   
   /* ── Button ─────────────────────────────────────────────── */
   .t-btn {

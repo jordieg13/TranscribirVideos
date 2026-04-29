@@ -1,6 +1,7 @@
 const input   = document.getElementById('t-url');
 const btn     = document.getElementById('t-btn');
 const btnText = document.getElementById('t-btn-text');
+const langSelect = document.getElementById('t-lang');
 const errorEl = document.getElementById('t-error');
 const skeleton = document.getElementById('t-skeleton');
 const result  = document.getElementById('t-result');
@@ -22,15 +23,15 @@ function clearError() {
 
 function setLoading(on) {
   btn.disabled = on;
-  btnText.textContent = on ? 'Transcribiendo…' : 'Descargar Transcripción';
+  btnText.textContent = on ? 'Transcribiendo…' : 'Generar transcripción';
   skeleton.classList.toggle('visible', on);
   if (on) result.classList.remove('visible');
 }
 
-function showResult(text) {
+function showResult(text, language) {
   const words = text.trim().split(/\s+/).length;
   textEl.textContent = text;
-  wcEl.textContent = words.toLocaleString('es-ES') + ' palabras';
+  wcEl.textContent = `${words.toLocaleString('es-ES')} palabras · idioma: ${language || 'original'}`;
 
   const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
   dlEl.href = URL.createObjectURL(blob);
@@ -59,6 +60,7 @@ copyBtn.addEventListener('click', async () => {
 
 async function transcribe() {
   const url = input.value.trim();
+  const targetLanguage = langSelect.value;
   clearError();
 
   if (!url) {
@@ -78,7 +80,7 @@ async function transcribe() {
     const res = await fetch('/api/transcribe', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ url }),
+      body: JSON.stringify({ url, targetLanguage }),
     });
 
     const data = await res.json();
@@ -100,7 +102,7 @@ async function transcribe() {
       throw new Error('El vídeo no tiene transcripción disponible.');
     }
 
-    showResult(text);
+    showResult(text, data.language);
   } catch (err) {
     setError(err.message || 'Error al conectar con el servidor.');
   } finally {
