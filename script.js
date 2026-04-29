@@ -89,13 +89,11 @@ async function transcribe() {
 
     let text = '';
     if (typeof data.transcript === 'string') {
-      text = data.transcript;
-    } else if (Array.isArray(data.transcript?.content)) {
-      text = data.transcript.content.map(c => c.text).join(' ');
-    } else if (typeof data.transcript?.text === 'string') {
-      text = data.transcript.text;
+    text = data.transcript;
+    } else if (Array.isArray(data.transcript)) {
+    text = data.transcript.map(c => c.text ?? c).join(' ');
     } else {
-      text = JSON.stringify(data.transcript, null, 2);
+    text = JSON.stringify(data.transcript, null, 2);
     }
 
     if (!text.trim()) {
