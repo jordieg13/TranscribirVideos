@@ -1,78 +1,74 @@
-const videoUrl   = document.getElementById('video-url');
-const btn        = document.getElementById('transcribe-btn');
-const errorMsg   = document.getElementById('error-msg');
-const skeleton   = document.getElementById('skeleton');
-const outputCard = document.getElementById('output-card');
-const outputText = document.getElementById('output-text');
-const copyBtn    = document.getElementById('copy-btn');
-const wordCount  = document.getElementById('word-count');
-const downloadLk = document.getElementById('download-link');
+const input   = document.getElementById('t-url');
+const btn     = document.getElementById('t-btn');
+const btnText = document.getElementById('t-btn-text');
+const errorEl = document.getElementById('t-error');
+const skeleton = document.getElementById('t-skeleton');
+const result  = document.getElementById('t-result');
+const textEl  = document.getElementById('t-text');
+const wcEl    = document.getElementById('t-wc');
+const copyBtn = document.getElementById('t-copy');
+const copyLbl = document.getElementById('t-copy-lbl');
+const dlEl    = document.getElementById('t-dl');
 
 // ── Helpers ──────────────────────────────────────────────
 
-function showError(msg) {
-  errorMsg.textContent = msg;
-  errorMsg.classList.add('error');
+function setError(msg) {
+  errorEl.textContent = msg;
 }
 
 function clearError() {
-  errorMsg.textContent = '';
-  errorMsg.classList.remove('error');
+  errorEl.textContent = '';
 }
 
-function setLoading(loading) {
-  btn.disabled = loading;
-  btn.querySelector('.btn-text').textContent = loading ? 'Transcribiendo…' : 'Transcribir';
-  skeleton.classList.toggle('visible', loading);
-  if (loading) outputCard.classList.remove('visible');
+function setLoading(on) {
+  btn.disabled = on;
+  btnText.textContent = on ? 'Transcribiendo…' : 'Descargar Transcripción';
+  skeleton.classList.toggle('visible', on);
+  if (on) result.classList.remove('visible');
 }
 
 function showResult(text) {
   const words = text.trim().split(/\s+/).length;
-  outputText.textContent = text;
-  wordCount.textContent  = `${words.toLocaleString('es-ES')} palabras`;
+  textEl.textContent = text;
+  wcEl.textContent = words.toLocaleString('es-ES') + ' palabras';
 
-  // Prepare download link
   const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
-  downloadLk.href = URL.createObjectURL(blob);
+  dlEl.href = URL.createObjectURL(blob);
 
-  outputCard.classList.add('visible');
-  outputCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  result.classList.add('visible');
+  result.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 // ── Copy ─────────────────────────────────────────────────
 
 copyBtn.addEventListener('click', async () => {
   try {
-    await navigator.clipboard.writeText(outputText.textContent);
-    copyBtn.querySelector('svg').style.display = 'none';
+    await navigator.clipboard.writeText(textEl.textContent);
     copyBtn.classList.add('copied');
-    const originalText = copyBtn.childNodes[copyBtn.childNodes.length - 1];
-    originalText.textContent = ' Copiado ✓';
+    copyLbl.textContent = 'Copiado ✓';
     setTimeout(() => {
       copyBtn.classList.remove('copied');
-      originalText.textContent = ' Copiar';
-      copyBtn.querySelector('svg').style.display = '';
+      copyLbl.textContent = 'Copiar';
     }, 2000);
   } catch {
-    showError('No se pudo copiar al portapapeles.');
+    setError('No se pudo copiar al portapapeles.');
   }
 });
 
 // ── Transcribe ───────────────────────────────────────────
 
 async function transcribe() {
-  const url = videoUrl.value.trim();
+  const url = input.value.trim();
   clearError();
 
   if (!url) {
-    showError('Por favor, introduce una URL.');
-    videoUrl.focus();
+    setError('Introduce una URL.');
+    input.focus();
     return;
   }
 
   if (!/^https?:\/\//i.test(url)) {
-    showError('La URL debe comenzar con http:// o https://');
+    setError('La URL debe comenzar con http:// o https://');
     return;
   }
 
@@ -80,9 +76,9 @@ async function transcribe() {
 
   try {
     const res = await fetch('/api/transcribe', {
-      method:  'POST',
+      method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify({ url }),
+      body: JSON.stringify({ url }),
     });
 
     const data = await res.json();
@@ -91,7 +87,6 @@ async function transcribe() {
       throw new Error(data.error || 'Error desconocido al transcribir.');
     }
 
-    // Supadata may return an object with a `content` array or plain text
     let text = '';
     if (typeof data.transcript === 'string') {
       text = data.transcript;
@@ -109,7 +104,7 @@ async function transcribe() {
 
     showResult(text);
   } catch (err) {
-    showError(err.message || 'Error al conectar con el servidor.');
+    setError(err.message || 'Error al conectar con el servidor.');
   } finally {
     setLoading(false);
   }
@@ -117,8 +112,8 @@ async function transcribe() {
 
 btn.addEventListener('click', transcribe);
 
-videoUrl.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter' && !e.shiftKey) {
+input.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
     e.preventDefault();
     transcribe();
   }

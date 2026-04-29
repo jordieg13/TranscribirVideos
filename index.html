@@ -6,75 +6,99 @@
   <title>Transcriptor de Vídeos</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="grain"></div>
 
   <main>
-    <header>
-      <div class="logo-mark">▶</div>
-      <h1>Transcriptor</h1>
-      <p class="subtitle">Pega la URL de cualquier vídeo público y obtén su transcripción al instante.</p>
-      <p class="platforms">YouTube · X · TikTok · Instagram</p>
-    </header>
+    <div class="t-inner">
 
-    <section class="input-section">
-      <div class="input-wrapper">
-        <label for="video-url">URL del vídeo</label>
-        <div class="input-row">
-          <textarea
-            id="video-url"
+      <div class="t-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="rgba(160,140,230,0.9)" stroke-width="2" stroke-linecap="round">
+          <line x1="9" y1="18" x2="9" y2="6"></line>
+          <line x1="6" y1="15" x2="6" y2="9"></line>
+          <line x1="12" y1="20" x2="12" y2="4"></line>
+          <line x1="15" y1="15" x2="15" y2="9"></line>
+          <line x1="18" y1="17" x2="18" y2="7"></line>
+        </svg>
+      </div>
+
+      <h1 class="t-title">Transcriptor</h1>
+      <p class="t-subtitle">Pega la URL de cualquier vídeo público y obtén su transcripción al instante.</p>
+
+      <div class="t-platforms">
+        <span class="t-platform">YouTube</span>
+        <span class="t-platform">X · Twitter</span>
+        <span class="t-platform">TikTok</span>
+        <span class="t-platform">Instagram</span>
+      </div>
+
+      <div class="t-input-section">
+        <label class="t-input-label" for="t-url">URL del vídeo</label>
+        <div class="t-input-row">
+          <svg class="t-input-icon" viewBox="0 0 24 24" fill="none" stroke="rgba(180,170,210,0.9)" stroke-width="2">
+            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+          </svg>
+          <input
+            class="t-input"
+            id="t-url"
+            type="text"
             placeholder="https://www.youtube.com/watch?v=..."
-            rows="2"
             autocomplete="off"
             spellcheck="false"
-          ></textarea>
-          <button id="transcribe-btn" aria-label="Transcribir">
-            <span class="btn-text">Transcribir</span>
-            <span class="btn-icon">→</span>
-          </button>
+          />
         </div>
-        <p class="hint" id="error-msg" role="alert" aria-live="polite"></p>
-      </div>
-    </section>
-
-    <section class="output-section" id="output-section" aria-live="polite">
-      <div class="output-skeleton" id="skeleton" aria-hidden="true">
-        <div class="sk-line w80"></div>
-        <div class="sk-line w100"></div>
-        <div class="sk-line w60"></div>
-        <div class="sk-line w100"></div>
-        <div class="sk-line w90"></div>
-        <div class="sk-line w70"></div>
       </div>
 
-      <div class="output-card" id="output-card">
-        <div class="output-header">
-          <span class="output-label">Transcripción</span>
-          <button class="copy-btn" id="copy-btn" title="Copiar texto">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-            </svg>
-            Copiar
-          </button>
+      <button class="t-btn" id="t-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+        <span id="t-btn-text">Descargar Transcripción</span>
+      </button>
+
+      <p class="t-error" id="t-error" role="alert" aria-live="polite"></p>
+
+      <div class="t-skeleton" id="t-skeleton">
+        <div class="t-sk" style="width:80%"></div>
+        <div class="t-sk" style="width:100%"></div>
+        <div class="t-sk" style="width:62%"></div>
+        <div class="t-sk" style="width:95%"></div>
+        <div class="t-sk" style="width:75%"></div>
+      </div>
+
+      <div class="t-result" id="t-result">
+        <div class="t-result-head">
+          <span class="t-result-lbl">Transcripción</span>
+          <div class="t-result-actions">
+            <button class="t-act-btn" id="t-copy">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              <span id="t-copy-lbl">Copiar</span>
+            </button>
+            <a id="t-dl" class="t-act-btn" download="transcripcion.txt">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              .txt
+            </a>
+          </div>
         </div>
-        <div class="output-text" id="output-text"></div>
-        <div class="output-footer">
-          <span id="word-count" class="word-count"></span>
-          <a id="download-link" class="download-btn" download="transcripcion.txt">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-              <polyline points="7 10 12 15 17 10"></polyline>
-              <line x1="12" y1="15" x2="12" y2="3"></line>
-            </svg>
-            Descargar .txt
-          </a>
+        <div class="t-result-body" id="t-text"></div>
+        <div class="t-result-foot">
+          <span class="t-wc" id="t-wc"></span>
         </div>
       </div>
-    </section>
+
+    </div>
   </main>
 
   <script src="script.js"></script>
